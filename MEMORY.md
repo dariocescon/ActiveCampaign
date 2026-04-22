@@ -1,5 +1,5 @@
 # Chi sono
-Dario — sviluppatore Java per sistemi RFID e di integrazione
+Granfry — sviluppatore Java per sistemi RFID e di integrazione
 # Cosa voglio da te
 - il codice deve essere Java 21 se non specificato diversamente
 - il codice deve essere lineare, comprensibile da sviluppatori junior in quanto dovrà essere manutenuto da questi ultimi

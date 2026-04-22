@@ -1,15 +1,17 @@
 package com.aton.proj.service;
 
-import com.aton.proj.dto.AcContactDto;
-import com.aton.proj.dto.BulkImportRequestDto;
-import com.aton.proj.dto.ContactSyncRequestDto;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.aton.proj.dto.AcContactDto;
+import com.aton.proj.dto.BulkImportRequestDto;
+import com.aton.proj.dto.ContactSyncRequestDto;
 
 @Service
 public class ContactService {
@@ -24,11 +26,8 @@ public class ContactService {
 
     private static final int BULK_BATCH_SIZE = 250;
 
-    private final TokenService tokenService;
-
-    public ContactService(TokenService tokenService) {
-        this.tokenService = tokenService;
-    }
+    @Autowired
+    private TokenService tokenService;
 
     /**
      * Sincronizza una lista di contatti su AC uno alla volta via /contact/sync (upsert per email).

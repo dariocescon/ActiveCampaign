@@ -1,25 +1,28 @@
 package com.aton.proj.scheduler;
 
-import com.aton.proj.dto.AcContactDto;
-import com.aton.proj.service.ContactService;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.aton.proj.dto.AcContactDto;
+import com.aton.proj.service.ContactService;
 
 @Component
 public class ContactScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(ContactScheduler.class);
 
-    private final ContactService contactService;
+    @Autowired
+    private ContactService contactService;
 
-    @Value("${app.scheduler.contact-sync.cron.active:true}")
+    @Value("${app.scheduler.contact-sync.cron.active:false}")
     private boolean syncEnabled;
 
     @Value("${app.scheduler.contact-bulk-import.cron.active:false}")
@@ -27,10 +30,6 @@ public class ContactScheduler {
 
     private final AtomicBoolean isSyncing = new AtomicBoolean(false);
     private final AtomicBoolean isBulkImporting = new AtomicBoolean(false);
-
-    public ContactScheduler(ContactService contactService) {
-        this.contactService = contactService;
-    }
 
     @Scheduled(cron = "${app.scheduler.contact-sync.cron}", zone = "${app.scheduler.timezone}")
     public void scheduleContactSync() {

@@ -6,7 +6,7 @@ Genera scheduler con gestione delle esecuzioni sovrapposte.
 ## Requisiti
 - Utilizza i parametri del application.properties
 - Annota i singoli metodi
-- Sfrutta la sovrapposizione tra esecuzioni utilizzando oggetti atomici
+- Gestisci la sovrapposizione tra esecuzioni utilizzando oggetti atomici
 - Verifica sempre che la schedulazione sia attivata da parametro
 - Dividi schedulazione da codice che viene schedulato: devono essere classi in file differenti
 - Logga
