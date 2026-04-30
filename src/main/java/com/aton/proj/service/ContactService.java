@@ -10,7 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import com.aton.proj.dto.AcContactDto;
+import com.aton.proj.dto.AcContactDetailDto;
 import com.aton.proj.dto.AcContactListResponseDto;
+import com.aton.proj.dto.AcContactResponseDto;
 import com.aton.proj.dto.BulkImportRequestDto;
 import com.aton.proj.dto.ContactSyncRequestDto;
 
@@ -50,7 +52,7 @@ public class ContactService {
 			AcContactDto contact = contacts.get(i);
 			try {
 				tokenService.getClient().post().uri("/contact/sync").contentType(MediaType.APPLICATION_JSON)
-						.body(new ContactSyncRequestDto(contact)).retrieve().toBodilessEntity();
+						.body(new ContactSyncRequestDto(contact)).retrieve().toEntity(AcContactResponseDto.class);
 				success++;
 				log.debug("Synced contact: {}", contact.email());
 			} catch (Exception e) {
@@ -105,6 +107,49 @@ public class ContactService {
 			Thread.currentThread().interrupt();
 			log.warn("Thread interrupted during {}", context);
 		}
+	}
+
+	/**
+	 * Elimina un contatto AC tramite DELETE /contacts/{id}.
+	 *
+	 * @param id identificativo del contatto su AC
+	 * @throws org.springframework.web.client.HttpClientErrorException.NotFound se il contatto non esiste
+	 */
+	public void deleteContactById(String id) {
+		log.info("Deleting AC contact by id: {}", id);
+
+		tokenService.getClient()
+				.delete()
+				.uri("/contacts/{id}", id)
+				.retrieve()
+				.toBodilessEntity();
+
+		log.debug("AC contact deleted: id={}", id);
+	}
+
+	/**
+	 * Recupera un singolo contatto AC tramite GET /contacts/{id}.
+	 *
+	 * @param id identificativo del contatto su AC
+	 * @return dati del contatto
+	 * @throws org.springframework.web.client.HttpClientErrorException.NotFound se il contatto non esiste
+	 */
+	public AcContactDetailDto getContactById(String id) {
+		log.info("Fetching AC contact by id: {}", id);
+
+		AcContactResponseDto response = tokenService.getClient()
+				.get()
+				.uri("/contacts/{id}", id)
+				.retrieve()
+				.body(AcContactResponseDto.class);
+
+		if (response == null || response.contact() == null) {
+			log.warn("Empty response from AC for contact id: {}", id);
+			throw new IllegalStateException("Empty response from AC for contact id: " + id);
+		}
+
+		log.debug("AC contact found: id={}, email={}", response.contact().id(), response.contact().email());
+		return response.contact();
 	}
 
 	/**

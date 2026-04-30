@@ -61,7 +61,13 @@ public record AcContactDetailDto(
         @JsonProperty("whatsapp_id")             String whatsappId,
         @JsonProperty("whatsapp_username")       String whatsappUsername,
 
-        // Relations
+        // Relations (presenti nella risposta singola GET /contacts/{id})
+        List<Object> contactAutomations,
+        List<String> contactLists,
+        String contactData,
+        List<Object> fieldValues,
+        List<Object> geoIps,
+        List<Object> deals,
         List<Object> scoreValues,
         List<Object> accountContacts,
         AcContactLinksDto links

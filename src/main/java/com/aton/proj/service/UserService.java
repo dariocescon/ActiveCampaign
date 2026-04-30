@@ -22,10 +22,8 @@ public class UserService {
 	 *
 	 * @param email indirizzo email dell'utente
 	 * @return dati dell'utente
-	 * @throws org.springframework.web.client.HttpClientErrorException.NotFound se
-	 *                                                                          l'utente
-	 *                                                                          non
-	 *                                                                          esiste
+	 * @throws org.springframework.web.client.HttpClientErrorException.
+	 * 	NotFound se l'utente non esiste
 	 */
 	public AcUserDto getUserByEmail(String email) {
 		log.info("Fetching AC user by email: {}", email);
